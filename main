@@ -1,0 +1,52 @@
+import urllib2
+import json
+from Tkinter import *
+
+url = 'http://api.usatoday.com/open/articles/topnews?encoding=json&api_key=nm4dsscmcw7uzgsmbzshzztm'
+
+
+def but1():
+    print("Select File")
+
+def usa_today_articles_scrapper():
+    try:
+        response = urllib2.urlopen(v)
+
+        data = json.loads(response.read())
+
+        # print(data['stories'][1]['link'])
+
+        text_file = open("links.txt", "w")
+        for index in range(len(data['stories'])):
+            if index < len(data['stories']) - 1:
+                text_file.writelines(data['stories'][index]['link'] + "\n")
+                print (data['stories'][index]['link'])
+            else:
+                text_file.writelines(data['stories'][index]['link'])
+                print (data['stories'][index]['link'])
+
+        text_file.close()
+
+    except urllib2.URLError, e:
+        print ("something went wrong" + e)
+
+
+#designing gui items
+myGUI = Tk()
+myGUI.title("ihScrapper")
+v = StringVar()
+b1 = Button(myGUI, text="Select File", padx=50)
+b2 = Button(myGUI, text="GO", padx=50)
+l1 = Label(myGUI, text="Type API URL :")
+e1 = Entry(myGUI, textvariable=v)
+
+#positioning items on gui
+l1.grid(row=0, column=1)
+e1.grid(row=0, column=2)
+b1.grid(row=1, column=2)
+b2.grid(row=1, column=3)
+
+#assigning methods on button click
+b1.configure(command = but1)
+b2.configure(command = usa_today_articles_scrapper)
+myGUI.mainloop()
