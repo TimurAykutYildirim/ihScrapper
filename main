@@ -3,6 +3,7 @@ import json
 from Tkinter import *
 
 url = 'http://api.usatoday.com/open/articles/topnews?encoding=json&api_key=nm4dsscmcw7uzgsmbzshzztm'
+url2 = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?q=sanofi&api-key=sample-key'
 
 
 def but1():
@@ -10,43 +11,73 @@ def but1():
 
 def usa_today_articles_scrapper():
     try:
-        response = urllib2.urlopen(v)
+        response = urllib2.urlopen(url)
 
         data = json.loads(response.read())
 
-        # print(data['stories'][1]['link'])
+        tf.delete(1.0, END)
 
-        text_file = open("links.txt", "w")
+        text_file = open("usa_today_links.txt", "w")
         for index in range(len(data['stories'])):
             if index < len(data['stories']) - 1:
                 text_file.writelines(data['stories'][index]['link'] + "\n")
                 print (data['stories'][index]['link'])
+                tf.insert(INSERT, data['stories'][index]['link'] + "\n")
             else:
                 text_file.writelines(data['stories'][index]['link'])
                 print (data['stories'][index]['link'])
+                tf.insert(INSERT, data['stories'][index]['link'])
+                tf.config(state=DISABLED)
 
         text_file.close()
 
     except urllib2.URLError, e:
         print ("something went wrong" + e)
 
+def ny_times_article_search_scrapper():
+    try:
+        response = urllib2.urlopen(url2)
+
+        data = json.loads(response.read())
+
+        tf.delete(1.0, END)
+
+        text_file = open("ny_times_links.txt", "w")
+        for index in range(len(data['response']['docs'])):
+            if index < len(data['response']['docs']) - 1:
+                text_file.writelines(data['response']['docs'][index]['web_url'] + "\n")
+                print (data['response']['docs'][index]['web_url'])
+                tf.insert(INSERT, data['response']['docs'][index]['web_url'] + "\n")
+            else:
+                text_file.writelines(data['response']['docs'][index]['web_url'])
+                print (data['response']['docs'][index]['web_url'])
+                tf.insert(INSERT, data['response']['docs'][index]['web_url'])
+                tf.config(state=DISABLED)
+
+        text_file.close()
+
+    except urllib2.URLError, e:
+        print ("something went wrong" + e)
 
 #designing gui items
 myGUI = Tk()
 myGUI.title("ihScrapper")
-v = StringVar()
 b1 = Button(myGUI, text="Select File", padx=50)
-b2 = Button(myGUI, text="GO", padx=50)
+b2 = Button(myGUI, text="USA Today Artciles API", padx=50)
+b3 = Button(myGUI, text="NY Times Article Search API", padx=50)
 l1 = Label(myGUI, text="Type API URL :")
-e1 = Entry(myGUI, textvariable=v)
+tf = Text(myGUI)
 
 #positioning items on gui
 l1.grid(row=0, column=1)
-e1.grid(row=0, column=2)
+
 b1.grid(row=1, column=2)
 b2.grid(row=1, column=3)
+b3.grid(row=2, column=3)
+tf.grid(row=2, column=1)
 
 #assigning methods on button click
-b1.configure(command = but1)
-b2.configure(command = usa_today_articles_scrapper)
+b1.configure(command=but1)
+b2.configure(command=usa_today_articles_scrapper)
+b3.configure(command=ny_times_article_search_scrapper)
 myGUI.mainloop()
