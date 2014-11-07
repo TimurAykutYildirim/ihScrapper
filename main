@@ -4,6 +4,8 @@ from Tkinter import *
 
 url = 'http://api.usatoday.com/open/articles/topnews?encoding=json&api_key=nm4dsscmcw7uzgsmbzshzztm'
 url2 = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?q=sanofi&api-key=sample-key'
+url3 = 'http://78.46.106.130:83/demo_apa_ots'
+url4 = 'http://content.guardianapis.com/?api-key=8zxduw5zum7m58ub5rwehytc&show-most-viewed=true&q=pfizer'
 
 
 def but1():
@@ -59,12 +61,64 @@ def ny_times_article_search_scrapper():
     except urllib2.URLError, e:
         print ("something went wrong" + e)
 
+def apa_ots_news_scrapper():
+    try:
+        response = urllib2.urlopen(url3)
+
+        data = json.loads(response.read())
+
+        tf.delete(1.0, END)
+
+        text_file = open("apa_ots_links.txt", "w")
+        for index in range(len(data['ergebnisse'])):
+            if index < len(data['ergebnisse']) - 1:
+                text_file.writelines(data['ergebnisse'][index]['WEBLINK'] + "\n")
+                print (data['ergebnisse'][index]['WEBLINK'])
+                tf.insert(INSERT, data['ergebnisse'][index]['WEBLINK'] + "\n")
+            else:
+                text_file.writelines(data['ergebnisse'][index]['WEBLINK'])
+                print (data['ergebnisse'][index]['WEBLINK'])
+                tf.insert(INSERT, data['ergebnisse'][index]['WEBLINK'])
+                tf.config(state=DISABLED)
+
+        text_file.close()
+
+    except urllib2.URLError, e:
+        print ("something went wrong" + e)
+
+def guardian_content_scrapper():
+    try:
+        response = urllib2.urlopen(url4)
+
+        data = json.loads(response.read())
+
+        tf.delete(1.0, END)
+
+        text_file = open("guardian_links.txt", "w")
+        for index in range(len(data['response']['mostViewed'])):
+            if index < len(data['response']['mostViewed']) - 1:
+                text_file.writelines(data['response']['mostViewed'][index]['webUrl'] + "\n")
+                print (data['response']['mostViewed'][index]['webUrl'])
+                tf.insert(INSERT, data['response']['mostViewed'][index]['webUrl'] + "\n")
+            else:
+                text_file.writelines(data['response']['mostViewed'][index]['webUrl'])
+                print (data['response']['mostViewed'][index]['webUrl'])
+                tf.insert(INSERT, data['response']['mostViewed'][index]['webUrl'])
+                tf.config(state=DISABLED)
+
+        text_file.close()
+
+    except urllib2.URLError, e:
+        print ("something went wrong" + e)
+
 #designing gui items
 myGUI = Tk()
 myGUI.title("ihScrapper")
 b1 = Button(myGUI, text="Select File", padx=50)
 b2 = Button(myGUI, text="USA Today Artciles API", padx=50)
 b3 = Button(myGUI, text="NY Times Article Search API", padx=50)
+b4 = Button(myGUI, text="APA OTS News API", padx=50)
+b5 = Button(myGUI, text="Guardian Content API", padx=50)
 l1 = Label(myGUI, text="Type API URL :")
 tf = Text(myGUI)
 
@@ -74,10 +128,14 @@ l1.grid(row=0, column=1)
 b1.grid(row=1, column=2)
 b2.grid(row=1, column=3)
 b3.grid(row=2, column=3)
+b4.grid(row=3, column=3)
+b5.grid(row=4, column=3)
 tf.grid(row=2, column=1)
 
 #assigning methods on button click
 b1.configure(command=but1)
 b2.configure(command=usa_today_articles_scrapper)
 b3.configure(command=ny_times_article_search_scrapper)
+b4.configure(command=apa_ots_news_scrapper)
+b5.configure(command=guardian_content_scrapper)
 myGUI.mainloop()
