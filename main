@@ -8,6 +8,9 @@ url3 = 'http://78.46.106.130:83/demo_apa_ots'
 url4 = 'http://content.guardianapis.com/?api-key=8zxduw5zum7m58ub5rwehytc&show-most-viewed=true&q=pfizer'
 
 
+# this will contain resulting query string that shapes according to chosen api and menu item
+queryString = ''
+
 def but1():
     print("Select File")
 
@@ -114,17 +117,26 @@ def guardian_content_scrapper():
 #designing gui items
 myGUI = Tk()
 myGUI.title("ihScrapper")
+
+#defining combobox which lists news sources
+var = StringVar(myGUI)
+var.set("Choose News Source")
+c1 = OptionMenu(myGUI, var, "NY Times", "USA TODAY", "APA OTS", "The Guardian")
+c1.pack()
+
+# defining buttons
 b1 = Button(myGUI, text="Select File", padx=50)
 b2 = Button(myGUI, text="USA Today Artciles API", padx=50)
 b3 = Button(myGUI, text="NY Times Article Search API", padx=50)
 b4 = Button(myGUI, text="APA OTS News API", padx=50)
 b5 = Button(myGUI, text="Guardian Content API", padx=50)
-l1 = Label(myGUI, text="Type API URL :")
+
+# defining textfield
 tf = Text(myGUI)
 
-#positioning items on gui
-l1.grid(row=0, column=1)
 
+#positioning items on gui
+c1.grid(row=0, column=0)
 b1.grid(row=1, column=2)
 b2.grid(row=1, column=3)
 b3.grid(row=2, column=3)
