@@ -12,7 +12,19 @@ url4 = 'http://content.guardianapis.com/?api-key=8zxduw5zum7m58ub5rwehytc&show-m
 queryString = ''
 
 def but1():
-    print("Select File")
+    print (var.get())
+    if(str(var.get()) == 'NY Times Article Search API'):
+        b1.configure(command=ny_times_article_search_scrapper)
+    elif(str(var.get()) == 'USA Today Articles API'):
+        b1.configure(command=usa_today_articles_scrapper)
+    elif(str(var.get()) == 'APA OTS News API'):
+        b1.configure(command=apa_ots_news_scrapper)
+    elif(str(var.get()) == 'Guardian Content API'):
+        b1.configure(command=guardian_content_scrapper)
+    elif(str(var.get()) == 'Choose News Source'):
+        tf.insert(INSERT, "You should choose something")
+    else:
+        tf.insert(INSERT, "Invalid choice")
 
 def usa_today_articles_scrapper():
     try:
@@ -121,12 +133,12 @@ myGUI.title("ihScrapper")
 #defining combobox which lists news sources
 var = StringVar(myGUI)
 var.set("Choose News Source")
-c1 = OptionMenu(myGUI, var, "NY Times", "USA TODAY", "APA OTS", "The Guardian")
+c1 = OptionMenu(myGUI, var, "NY Times Article Search API", "USA Today Articles API", "APA OTS News API", "Guardian Content API")
 c1.pack()
 
 # defining buttons
-b1 = Button(myGUI, text="Select File", padx=50)
-b2 = Button(myGUI, text="USA Today Artciles API", padx=50)
+b1 = Button(myGUI, text="Go", padx=50)
+b2 = Button(myGUI, text="USA Today Articles API", padx=50)
 b3 = Button(myGUI, text="NY Times Article Search API", padx=50)
 b4 = Button(myGUI, text="APA OTS News API", padx=50)
 b5 = Button(myGUI, text="Guardian Content API", padx=50)
@@ -137,12 +149,12 @@ tf = Text(myGUI)
 
 #positioning items on gui
 c1.grid(row=0, column=0)
-b1.grid(row=1, column=2)
-b2.grid(row=1, column=3)
-b3.grid(row=2, column=3)
-b4.grid(row=3, column=3)
-b5.grid(row=4, column=3)
-tf.grid(row=2, column=1)
+b1.grid(row=1, column=0)
+b2.grid(row=2, column=0)
+b3.grid(row=3, column=0)
+b4.grid(row=4, column=0)
+b5.grid(row=5, column=0)
+tf.grid(row=6, column=0)
 
 #assigning methods on button click
 b1.configure(command=but1)
