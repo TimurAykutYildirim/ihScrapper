@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
+
 import urllib2
 import json
 from Tkinter import *
 
 url = 'http://api.usatoday.com/open/articles/topnews?encoding=json&api_key=nm4dsscmcw7uzgsmbzshzztm'
-url2 = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?q=sanofi&api-key=sample-key'
+url2 = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?q=pharma&page=pageNum&api-key=f8f3f3386b84e418b8cec379f732e0c0%3A1%3A70152454'
 url3 = 'http://78.46.106.130:83/demo_apa_ots'
 url4 = 'http://content.guardianapis.com/?api-key=8zxduw5zum7m58ub5rwehytc&show-most-viewed=true&q=pfizer'
 
@@ -51,15 +53,28 @@ def usa_today_articles_scrapper():
     except urllib2.URLError, e:
         print ("something went wrong" + e)
 
-def ny_times_article_search_scrapper():
+def ny_times_looper():
     try:
-        response = urllib2.urlopen(url2)
+        for counter in range(1,110):
+            newUrl =  url2.replace("pageNum", str(counter))
+            ny_times_article_search_scrapper(newUrl)
+            #print newUrl
+
+    except Exception as error:
+        print error
+
+
+# x burada ny_times_looper methodundan gelecek url'leri sırayla ny_times_article_search_scrapper methoduna gönderiyor
+
+def ny_times_article_search_scrapper(x):
+    try:
+        response = urllib2.urlopen(x)
 
         data = json.loads(response.read())
 
         tf.delete(1.0, END)
 
-        text_file = open("ny_times_links.txt", "w")
+        text_file = open("ny_times_links.txt", "a")
         for index in range(len(data['response']['docs'])):
             if index < len(data['response']['docs']) - 1:
                 text_file.writelines(data['response']['docs'][index]['web_url'] + "\n")
@@ -75,7 +90,32 @@ def ny_times_article_search_scrapper():
 
     except urllib2.URLError, e:
         print ("something went wrong" + e)
+'''
+def ny_times_article_search_scrapper():
+    try:
+        response = urllib2.urlopen(url2)
 
+        data = json.loads(response.read())
+
+        tf.delete(1.0, END)
+
+        text_file = open("ny_times_links.txt", "a")
+        for index in range(len(data['response']['docs'])):
+            if index < len(data['response']['docs']) - 1:
+                text_file.writelines(data['response']['docs'][index]['web_url'] + "\n")
+                print (data['response']['docs'][index]['web_url'])
+                tf.insert(INSERT, data['response']['docs'][index]['web_url'] + "\n")
+            else:
+                text_file.writelines(data['response']['docs'][index]['web_url'])
+                print (data['response']['docs'][index]['web_url'])
+                tf.insert(INSERT, data['response']['docs'][index]['web_url'])
+                tf.config(state=DISABLED)
+
+        text_file.close()
+
+    except urllib2.URLError, e:
+        print ("something went wrong" + e)
+'''
 def apa_ots_news_scrapper():
     try:
         response = urllib2.urlopen(url3)
@@ -157,7 +197,7 @@ b5.grid(row=5, column=0)
 tf.grid(row=6, column=0)
 
 #assigning methods on button click
-b1.configure(command=but1)
+b1.configure(command=ny_times_looper)
 b2.configure(command=usa_today_articles_scrapper)
 b3.configure(command=ny_times_article_search_scrapper)
 b4.configure(command=apa_ots_news_scrapper)
