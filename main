@@ -116,9 +116,12 @@ def ny_times_article_search_scrapper():
     except urllib2.URLError, e:
         print ("something went wrong" + e)
 '''
+
 def apa_ots_news_scrapper():
     try:
         response = urllib2.urlopen(url3)
+
+        str(response).decode('string-escape')
 
         data = json.loads(response.read())
 
