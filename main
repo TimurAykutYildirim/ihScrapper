@@ -7,6 +7,7 @@ from Tkinter import *
 url = 'http://api.usatoday.com/open/articles/topnews?encoding=json&api_key=nm4dsscmcw7uzgsmbzshzztm'
 url2 = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?q=pharma&page=pageNum&api-key=f8f3f3386b84e418b8cec379f732e0c0%3A1%3A70152454'
 url3 = 'http://78.46.106.130:83/demo_apa_ots'
+#http://www.ots.at/api/liste?app=5359f98af2e4d8f738170b82b8eeaece&query=sanofi&inhalt=alle&anz=500&format=json&page=1&von=1321977668&bis=1416585668
 url4 = 'http://content.guardianapis.com/?api-key=8zxduw5zum7m58ub5rwehytc&show-most-viewed=true&q=pfizer'
 
 
